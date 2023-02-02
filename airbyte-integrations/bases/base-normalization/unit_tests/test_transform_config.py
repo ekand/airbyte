@@ -453,6 +453,25 @@ class TestTransformConfig:
         assert expected == actual
         assert extract_schema(actual) == "default"
 
+    def test_transform_clickhouse_no_ssl(self):
+        input = {"host": "airbyte.io", "port": 9440, "database": "default", "username": "ch", "password": "password1234"}
+
+        actual = TransformConfig().transform_clickhouse(input)
+        expected = {
+            "type": "clickhouse",
+            "driver": "http",
+            "verify": False,
+            "host": "airbyte.io",
+            "port": 9440,
+            "schema": "default",
+            "user": "ch",
+            "password": "password1234",
+            # "secure": True,
+        }
+
+        assert expected == actual
+        assert extract_schema(actual) == "default"
+
     # test that the full config is produced. this overlaps slightly with the transform_postgres test.
     def test_transform(self):
         input = {
